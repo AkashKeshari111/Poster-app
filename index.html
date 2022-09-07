@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Page</title>
+</head>
+<style>
+    body{
+        background-color: black;
+    }
+#container{
+    width: 100%;
+    height:730px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    font-family: sans-serif;
+    
+}
+#container>div{
+    width: 70%;
+    height: 80%;
+    /* border:1px solid blue; */
+    /* text-align: center; */
+    color: white;
+    cursor: pointer;
+}
+img{
+    width: 100%;
+    height: 80%;
+}
+h1,h3,p{
+    padding-left: 15px;
+}
+a{
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: grey;
+    color: white;
+    padding: 15px;
+
+}
+
+#search{
+   width: 600px;
+   outline: none;
+   height: 40px;
+   border: 2px solid white;
+   font-size: larger;
+   padding-left: 15px;
+}
+.adiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+button{
+    height: 42px;
+}
+h1{
+    color: white;
+    text-align: center;
+}
+</style>
+<body>
+   <!-- <a href="trend.html">Trending Video</a> -->
+   <h1>Just Type any Movie Name</h1>
+   <br><br>
+   <div class="adiv">
+    <input id="search"type="search">
+
+    <button onclick="movie()">click me </button>   </div>  
+<div id="container"></div>
+</body>
+
+</html>
+
+<script>
+   
+
+
+function movie(){
+    let search=document.getElementById("search").value
+    
+   
+    const url=`http://www.omdbapi.com/?apikey=4ad0b8ff&t=${search}`;
+    fetch(url)
+    .then(function(res){
+        
+        return res.json()
+    })
+    .then(function(res){
+        if(search==""){
+        alert("please enter data")
+    }else{
+        searchmovie(res)
+    }
+        
+    })
+    .catch(function(err){
+        console.log(err)
+     
+    })
+}
+
+function searchmovie(data){
+    document.getElementById("container").innerText=null
+    const container=document.getElementById("container")
+    let div=document.createElement("div")
+    let poster=document.createElement("img")
+    let release_date=document.createElement("h3")
+    let title=document.createElement("h2")
+    let rating=document.createElement("p")
+    if(data.Response=="False" ){
+        poster.src="https://c.tenor.com/IHdlTRsmcS4AAAAM/404.gif"
+    }
+ else{
+
+      
+ 
+       poster.src=data.Poster
+       poster.alt=`Image of ${data.Title} movie`
+
+       release_date.innerText=data.Released
+   
+        title.innerText=data.Title
+    
+    
+    
+       if(data.imdbRating>7.5){
+          rating.innerText=`${data.imdbRating}* Recommended`
+       }
+       else{
+          rating.innerText=`${data.imdbRating}*`
+       }
+   
+    }
+   
+    div.append(poster,title,release_date,rating)
+    container.append(div)  
+ 
+}
+
+</script>
